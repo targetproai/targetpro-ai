@@ -1151,6 +1151,29 @@ body {
   color: var(--text);
 }
 
+/* Fix: audit progress message must stay fully visible above the input area. */
+.chat-messages {
+  padding-bottom: 92px;
+  scroll-padding-bottom: 92px;
+}
+
+.msg-typing {
+  max-width: min(620px, 94%);
+  padding: 16px 18px 26px;
+  overflow: visible;
+}
+
+.msg-typing::before {
+  bottom: 11px;
+}
+
+.typing-status {
+  display: block;
+  width: 100%;
+  white-space: normal;
+  overflow: visible;
+}
+
 .rating-card {
   padding: 20px;
   border: 1px solid var(--border);
