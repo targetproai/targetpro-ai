@@ -852,7 +852,7 @@ async function stepPassportShow() {
   botMessage(msgs[lang]);
   showTyping();
 
-  const passportHTML = await generatePassportViaAI();
+  const passportHTML = cleanPassportHTML(await generatePassportViaAI());
   removeTyping();
 
   document.getElementById('passportContent').innerHTML = passportHTML;
@@ -867,58 +867,33 @@ async function stepPassportShow() {
 }
 
 async function generatePassportViaAI() {
-  const prompt = `Создай HTML-маркетинговый паспорт для бизнеса. Используй ТОЛЬКО inline-стили. Язык: ${lang === 'ru' ? 'русский' : 'кыргызский'}.
-
-Данные:
-- Имя: ${userData.name}
-- Instagram: ${userData.instagram}
-- Ниша: ${userData.niche}
-- Город: ${userData.city}
-- Описание: ${userData.profileDesc}
-- Цель: ${userData.goal}
-- Рейтинг: ${userData.rating}/100
-- Средний чек: ${userData.avgCheck} сом
-- Текущих заявок: ${userData.currentLeads}/мес
-- Желаемых заявок: ${userData.desiredLeads}/мес
-
-Создай HTML-отчёт со следующими разделами (все с inline-стилями, тёмный фон #0f1120, текст #e8eaf6, акцент #4f8eff):
-1. Шапка с логотипом TARGETPRO AI и именем клиента
-2. Маркетинговый рейтинг (большая цифра)
-3. Анализ профиля (ошибки и сильные стороны)
-4. Быстрые улучшения (3 действия на 24 часа)
-5. 5 идей для Reels под нишу ${userData.niche}
-6. 3 оффера для ${userData.city}
-7. Прогноз рекламы в сомах
-8. Рекомендуемый следующий шаг
-9. Футер: "Подготовлено системой TARGETPRO AI | Автор: Евгений Тузов"
-
-Только HTML, никаких markdown. Компактно, но информативно.`;
-
-try {
-  const data = await postToAppsScript({
-    action: 'generateAudit',
-    prompt: prompt
-  });
-
-  const text = extractGeneratedText(data);
-  if (isValidPassportHTML(text)) {
-    return text;
-  }
-
-  console.error('Passport empty response:', data);
+  // Паспорт собираем локально: Gemini иногда возвращает пустой/обрезанный HTML
+  // или markdown-блок, из-за чего скачанный файл открывается как текст.
   return fallbackPassport();
-
-} catch (e) {
-  console.error('Passport error:', e);
-  return fallbackPassport();
-}
 }
 
 function isValidPassportHTML(html) {
-  const text = String(html || '').trim();
+  const text = cleanPassportHTML(html);
   if (text.length < 100) return false;
   if (/^https?:\/\//i.test(text)) return false;
   return /<\s*(div|section|article|h1|h2|h3|p|ul|li|table)\b/i.test(text);
+}
+
+function cleanPassportHTML(html) {
+  let text = String(html || '').trim();
+
+  text = text
+    .replace(/^```(?:html)?\s*/i, '')
+    .replace(/\s*```$/i, '')
+    .trim();
+
+  const bodyMatch = text.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+  if (bodyMatch) text = bodyMatch[1].trim();
+
+  const htmlStart = text.search(/<\s*(div|section|article|h1|h2|h3|p|ul|li|table)\b/i);
+  if (htmlStart > 0) text = text.slice(htmlStart).trim();
+
+  return text;
 }
 
 function fallbackPassport() {
@@ -1108,7 +1083,7 @@ function closePassport() {
 }
 
 function downloadPassport() {
-  const content = document.getElementById('passportContent').innerHTML;
+  const content = cleanPassportHTML(document.getElementById('passportContent').innerHTML);
   const safeContent = isValidPassportHTML(content) ? content : fallbackPassport();
   const html = `<!DOCTYPE html><html lang="${lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TARGETPRO AI - Marketing Passport</title><style>body{margin:0;background:#0f1120;color:#e8eaf6;font-family:Arial,sans-serif;padding:24px;line-height:1.6}.passport-header{display:flex;justify-content:space-between;gap:16px;align-items:center;border-bottom:1px solid #2a315f;padding-bottom:18px;margin-bottom:22px}.passport-logo{font-size:24px;font-weight:800}.passport-logo span{color:#7c5cff}.passport-title{color:#aeb6df;font-size:13px}.passport-score{text-align:center;margin:22px 0}.score-ring{display:inline-flex;width:96px;height:96px;border-radius:50%;align-items:center;justify-content:center;background:#4f8eff;color:white;font-size:36px;font-weight:800}.score-label{margin-top:10px;color:#aeb6df}.passport-row{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}.passport-chip{border:1px solid #2a315f;border-radius:999px;padding:8px 12px;background:#171b33}.passport-section{margin:22px 0;padding:16px;border:1px solid #25305f;border-radius:12px;background:#15192f}.passport-section h3{margin-top:0;color:#ffffff}.passport-section ul{padding-left:20px}.passport-footer{margin-top:24px;color:#aeb6df;font-size:13px;text-align:center}</style></head><body>${safeContent}</body></html>`;
   const blob = new Blob([html], { type: 'text/html' });
@@ -1157,9 +1132,34 @@ function botMessage(text) {
   const msgs = document.getElementById('chatMessages');
   const div = document.createElement('div');
   div.className = 'msg msg-bot';
-  div.innerHTML = text.replace(/\n/g, '<br>');
+  div.innerHTML = formatBotText(text);
   msgs.appendChild(div);
   msgs.scrollTop = msgs.scrollHeight;
+}
+
+function formatBotText(text) {
+  return String(text || '')
+    .replace(/```(?:html)?/gi, '')
+    .replace(/```/g, '')
+    .split('\n')
+    .map(line => {
+      let clean = escapeHTML(line.trimEnd());
+      clean = clean.replace(/^\s*[\*\-]\s+/, '• ');
+      clean = clean.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+      clean = clean.replace(/\*(.+?)\*/g, '$1');
+      clean = clean.replace(/\*\*/g, '').replace(/\*/g, '');
+      return clean;
+    })
+    .join('<br>');
+}
+
+function escapeHTML(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 function botMessageHTML(html) {
