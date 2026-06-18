@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="TARGETPRO AI — бесплатный AI-аудит бизнеса в Кыргызстане. Анализ Instagram, рекламы и воронки продаж, расчёт потенциального дохода и маркетинговый паспорт." />
+  <title>TARGETPRO AI — AI-аудит роста бизнеса в Кыргызстане</title>
+  <link rel="stylesheet" href="style.css" />
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX');
+  </script>
+</head>
+<body>
+
+<!-- ===== LANGUAGE SELECTOR ===== -->
+<div id="lang-overlay" class="lang-overlay">
+  <div class="lang-box">
+    <div class="lang-logo">TARGETPRO <span>AI</span></div>
+    <p class="lang-hint">Выберите язык / Тилди тандаңыз</p>
+    <button class="lang-btn" onclick="selectLanguage('ru')">🇷🇺 Русский</button>
+    <button class="lang-btn" onclick="selectLanguage('ky')">🇰🇬 Кыргызча</button>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header class="header">
+  <div class="header-inner">
+    <div class="logo">TARGETPRO <span>AI</span></div>
+    <div class="header-right">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" type="button">🌙 AI Mode</button>
+      <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()">🇰🇬 KY</button>
+      <a href="#chat" class="btn-header" id="headerCta">Получить аудит</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="container">
+    <div class="hero-badge" id="heroBadge">🤖 AI-аудит роста для бизнеса Кыргызстана</div>
+    <h1 class="hero-title" id="heroTitle">Узнайте, где ваш бизнес<br>теряет клиентов</h1>
+    <p class="hero-sub" id="heroSub">TARGETPRO AI проанализирует Instagram, рекламу и воронку продаж, а затем покажет точки роста бизнеса в сомах.</p>
+    <button class="btn-primary pulse" id="heroBtn" onclick="startChat()">Получить бесплатный AI-аудит</button>
+    <p class="hero-author" id="heroAuthor">Создано Евгением Тузовым</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="stat-n">500+</span><span class="stat-l" id="stat1">аудитов проведено</span></div>
+      <div class="stat"><span class="stat-n">120+</span><span class="stat-l" id="stat2">клиентов получили заявки</span></div>
+      <div class="stat"><span class="stat-n">3x</span><span class="stat-l" id="stat3">рост конверсии в среднем</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="steps-section">
+  <div class="container">
+    <h2 class="section-title" id="stepsTitle">Как это работает</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🔗</div>
+        <div class="step-text">
+          <strong id="step1t">Покажите бизнес и Instagram</strong>
+          <span id="step1d">AI изучает профиль, оффер, контент и путь клиента</span>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-icon">📊</div>
+        <div class="step-text">
+          <strong id="step2t">Получите маркетинговый рейтинг</strong>
+          <span id="step2d">До 100 баллов с детальной расшифровкой</span>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-icon">💰</div>
+        <div class="step-text">
+          <strong id="step3t">Узнайте дополнительный доход в сомах</strong>
+          <span id="step3d">Формула расчёта с учётом заявок, среднего чека и конверсии</span>
+        </div>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step">
+        <div class="step-icon">📄</div>
+        <div class="step-text">
+          <strong id="step4t">Получите маркетинговый паспорт</strong>
+          <span id="step4d">HTML-отчёт с планом действий на 30 дней</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CHAT WIDGET ===== -->
+<section class="chat-section" id="chat">
+  <div class="container">
+    <h2 class="section-title" id="chatTitle">Начните AI-аудит прямо сейчас</h2>
+    <div class="chat-widget">
+      <div class="chat-header">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-info">
+          <strong>TARGETPRO AI</strong>
+          <span class="online-dot"></span><small id="onlineText">онлайн</small>
+        </div>
+      </div>
+      <div class="chat-messages" id="chatMessages"></div>
+      <div class="chat-input-area" id="chatInputArea">
+        <input type="text" id="chatInput" placeholder="Напишите ответ..." autocomplete="off" />
+        <button onclick="sendUserMessage()" id="sendBtn">➤</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section class="services-section">
+  <div class="container">
+    <h2 class="section-title" id="servicesTitle">Что покажет бесплатный AI-аудит</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📱</div>
+        <h3 id="s1t">Где теряются клиенты</h3>
+        <p id="s1d">AI находит слабые места в Instagram, рекламе, оффере и воронке продаж.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🤖</div>
+        <h3 id="s2t">Что мешает заявкам</h3>
+        <p id="s2d">Показывает, где нет доверия, понятного CTA, прогрева или быстрой обработки обращений.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚡</div>
+        <h3 id="s3t">Сколько денег можно вернуть</h3>
+        <p id="s3d">Считает потенциальный дополнительный доход в месяц и в год на основе ваших цифр.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <h3 id="s4t">Что исправить первым</h3>
+        <p id="s4d">Даёт быстрые действия на 24 часа и план роста, который можно внедрять сразу.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🔄</div>
+        <h3 id="s5t">Что нужно именно вам</h3>
+        <p id="s5d">По итогам аудита станет понятно: нужен таргет, воронка, чат-бот, автоматизация или консультация.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📊</div>
+        <h3 id="s6t">Как запустить рост</h3>
+        <p id="s6d">Евгений разберёт рекомендации TARGETPRO AI и предложит самый быстрый путь к заявкам.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== TESTIMONIALS ===== -->
+<section class="testimonials-section">
+  <div class="container">
+    <h2 class="section-title" id="testimonialsTitle">Кейсы и цифры</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="t-top">
+          <div class="t-avatar">АМ</div>
+          <div>
+            <strong>RIO</strong>
+            <small>Реклама Meta Ads</small>
+          </div>
+        </div>
+        <p id="t1">"RIO: после настройки рекламы получили 39 лидов по $0.32. Заявки пошли уже в первые дни кампании."</p>
+        <div class="t-result">39 лидов / $0.32</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-top">
+          <div class="t-avatar">ТА</div>
+          <div>
+            <strong>Детский лагерь</strong>
+            <small>Сезонный набор заявок</small>
+          </div>
+        </div>
+        <p id="t2">"Детский лагерь: собрали поток заявок перед сезоном и быстро поняли, какие объявления дают самые дешёвые обращения."</p>
+        <div class="t-result">заявки перед сезоном</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="t-top">
+          <div class="t-avatar">НК</div>
+          <div>
+            <strong>Локальный бизнес</strong>
+            <small>Оффер + CTA + реклама</small>
+          </div>
+        </div>
+        <p id="t3">"Локальный бизнес: после аудита усилили оффер, добавили CTA и получили 47 заявок за месяц."</p>
+        <div class="t-result">47 заявок / месяц</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== OWNER ===== -->
+<section class="owner-section">
+  <div class="container">
+    <div class="owner-card">
+      <div class="owner-photo" aria-label="Евгений Тузов">ЕТ</div>
+      <div class="owner-copy">
+        <h2 id="ownerTitle">👋 Меня зовут Евгений Тузов</h2>
+        <p id="ownerText">Настраиваю таргетированную рекламу, воронки и автоматизацию для бизнеса Кыргызстана. TARGETPRO AI помогает быстро увидеть слабые места, а я помогаю внедрить решения без лишних ошибок.</p>
+        <div class="owner-badges">
+          <span id="ownerBadge1">Таргет Meta Ads</span>
+          <span id="ownerBadge2">Воронки продаж</span>
+          <span id="ownerBadge3">Автоматизация заявок</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CTA ===== -->
+<section class="cta-section">
+  <div class="container">
+    <h2 id="ctaTitle">Готовы увидеть точки роста бизнеса?</h2>
+    <p id="ctaSub">Получите бесплатный AI-аудит и поймите, что мешает заявкам прямо сейчас.</p>
+    <button class="btn-primary" onclick="startChat()" id="ctaBtn">Запустить бесплатный аудит</button>
+    <div class="cta-contacts">
+      <a href="https://wa.me/996XXXXXXXXX" class="contact-link" id="waLink" target="_blank">💬 WhatsApp</a>
+      <a href="https://t.me/XXXXXXXXX" class="contact-link" id="tgLink" target="_blank">✈️ Telegram</a>
+      <a href="https://instagram.com/XXXXXXXXX" class="contact-link" id="igLink" target="_blank">📸 Instagram</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container">
+    <div class="logo">TARGETPRO <span>AI</span></div>
+    <p id="footerText">Первый AI-маркетолог для бизнеса в Кыргызстане</p>
+    <p id="footerAuthor">© 2025 Евгений Тузов. Все права защищены.</p>
+  </div>
+</footer>
+
+<!-- ===== PASSPORT MODAL ===== -->
+<div id="passportModal" class="modal-overlay" style="display:none">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closePassport()">✕</button>
+    <div id="passportContent"></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px">
+      <button class="btn-primary" onclick="downloadPassport()" id="downloadBtn">⬇ Скачать паспорт</button>
+      <button class="btn-secondary" onclick="closePassport()" id="closePassBtn">Закрыть</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AUTOPILOT MODAL ===== -->
+<div id="autopilotModal" class="modal-overlay" style="display:none">
+  <div class="modal-content autopilot-modal">
+    <div class="autopilot-icon">🚀</div>
+    <h2 id="apTitle">Режим АВТОПИЛОТ</h2>
+    <p id="apDesc">Поделитесь ссылкой с другом-предпринимателем и получите расширенный аудит, 10 идей для Reels и 7-дневный план действий бесплатно!</p>
+    <div class="autopilot-bonuses" id="apBonuses">
+      <div class="bonus-item">📊 Расширенный аудит профиля</div>
+      <div class="bonus-item">🎬 10 идей для Reels под вашу нишу</div>
+      <div class="bonus-item">📅 7-дневный контент-план</div>
+      <div class="bonus-item">🎯 Рекомендации по воронке и заявкам</div>
+      <div class="bonus-item">📞 Приоритетная консультация</div>
+    </div>
+    <button class="btn-primary" onclick="shareLink()" id="apShareBtn">📤 Поделиться ссылкой</button>
+    <button class="btn-secondary" onclick="confirmShare()" id="apConfirmBtn" style="display:none">✅ Я поделился</button>
+    <button class="btn-ghost" onclick="skipAutopilot()" id="apSkipBtn">Пропустить</button>
+  </div>
+</div>
+
+<a href="https://wa.me/996XXXXXXXXX" class="floating-whatsapp" id="floatingWa" target="_blank" rel="noopener">
+  💬 <span>Написать Евгению</span>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
