@@ -6,12 +6,11 @@
 // ===== НАСТРОЙКИ (заменить своими данными) =====
 const CONFIG = {
   APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbx94-GCp-Z1uKpC2_PrfQL3UnE86PYDTrUa_Z70-RHXFMJ0u183pUBr3H97MjMh_oe_/exec',
-  TELEGRAM_BOT_TOKEN: 'XXXXXXXXXX:XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX',
-  TELEGRAM_CHAT_ID: '-100XXXXXXXXXX',
-  INSTAGRAM_URL: 'https://instagram.com/XXXXXXXXX',
-  GA_ID: 'G-XXXXXXXXXX',
-  WHATSAPP: '996XXXXXXXXX',
-  SITE_URL: 'https://targetpro.kg',
+  INSTAGRAM_URL: 'https://www.instagram.com/jack.target_/?hl=ru',
+  TELEGRAM_URL: 'https://t.me/EvgenyTarget',
+  GA_ID: 'G-F33JN0NB6R',
+  WHATSAPP: '996701883851',
+  SITE_URL: 'https://targetproai.github.io/targetpro-ai/',
 };
 
 async function postToAppsScript(payload) {
@@ -247,11 +246,15 @@ document.addEventListener('DOMContentLoaded', () => {
 function syncExternalLinks() {
   const waUrl = `https://wa.me/${CONFIG.WHATSAPP}`;
   const igUrl = CONFIG.INSTAGRAM_URL;
+  const tgUrl = CONFIG.TELEGRAM_URL;
 
   ['waLink', 'floatingWa'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.href = waUrl;
   });
+
+  const tg = document.getElementById('tgLink');
+  if (tg) tg.href = tgUrl;
 
   const ig = document.getElementById('igLink');
   if (ig) ig.href = igUrl;
@@ -1147,34 +1150,6 @@ async function sendLeadData() {
   try {
     await postToAppsScript(payload);
   } catch (e) { console.error('Sheets error:', e); }
-
-  // Отправить в Telegram
-  const tgText = `🔥 Новый лид — TARGETPRO AI
-
-👤 Имя: ${payload.name}
-📱 Телефон: ${payload.phone}
-📸 Instagram: ${payload.instagram}
-🏢 Ниша: ${payload.niche}
-🏙 Город: ${payload.city}
-🎯 Цель: ${payload.goal}
-🌐 Язык: ${lang === 'ru' ? 'Русский' : 'Кыргызча'}
-⭐ Рейтинг: ${payload.rating}/100
-💰 Средний чек: ${payload.avgCheck} сом
-📊 Статус: ${status}
-🔗 Источник: ${payload.source}
-📤 Поделился: ${payload.sharedLink}`;
-
-  try {
-    await fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM_BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: CONFIG.TELEGRAM_CHAT_ID,
-        text: tgText,
-        parse_mode: 'HTML',
-      })
-    });
-  } catch (e) { console.error('Telegram error:', e); }
 }
 
 // ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ЧАТА =====
